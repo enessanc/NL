@@ -8,7 +8,7 @@ namespace NL
 		class ServerInterface
 		{
 		public:
-			ServerInterface(uint16_t port)
+			explicit ServerInterface(uint16_t port)
 				: m_asioAccepter(m_asioContext, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
 			{
 
@@ -29,11 +29,9 @@ namespace NL
 				}
 				catch (std::exception& e)
 				{
-					//TODO: Replace this with spdlog::error
-					std::cerr << "[SERVER] Exception" << e.what() << "\n";
+					std::cerr << "[SERVER] Exception: " << e.what() << "\n";
 					return false;
 				}
-				//TODO: Replace this with spdlog::info
 				std::cout << "[SERVER] Started!\n";
 				return true;
 			}
@@ -59,8 +57,8 @@ namespace NL
 						{
 							std::cout << "[SERVER] New Connection: " << socket.remote_endpoint() << "\n";
 
-							std::shared_ptr<connection<T>> newconn =
-								std::make_shared<connection<T>>(connection<T>::owner::server,
+							std::shared_ptr<Connection<T>> newconn =
+								std::make_shared<Connection<T>>(Connection<T>::owner::server,
 									m_asioContext, std::move(socket), m_qMessagesIn);
 
 							if (OnClientConnect(newconn))
@@ -76,14 +74,14 @@ namespace NL
 						}
 						else
 						{
-							std::cout << "[SERVER] New Connection Error: " << ec.Message() << "\n";
+							std::cout << "[SERVER] New Connection Error: " << ec.message() << "\n";
 						}
 						//Prime the asio context with more work, again simply wait for another Connection
 						WaitForClientConnection();
 					});
 			}
 
-			void MessageClient(std::shared_ptr<connection<T>> client, const Message<T>& msg)
+			void MessageClient(std::shared_ptr<Connection<T>> client, const Message<T>& msg)
 			{
 				if (client && client->IsConnected())
 				{
@@ -99,7 +97,7 @@ namespace NL
 				}
 			}
 
-			void MessageAllClients(const Message<T>& msg, std::shared_ptr<connection<T>> pIgnoreClient = nullptr)
+			void MessageAllClients(const Message<T>& msg, std::shared_ptr<Connection<T>> pIgnoreClient = nullptr)
 			{
 				bool bInvalidClientExists = false;
 
@@ -139,22 +137,22 @@ namespace NL
 				}
 			}
 
-			virtual void OnClientValidated(std::shared_ptr<connection<T>> client)
+			virtual void OnClientValidated(std::shared_ptr<Connection<T>> client)
 			{
 			}
 
 		protected:
 
-			virtual bool OnClientConnect(std::shared_ptr<connection<T>> client)
+			virtual bool OnClientConnect(std::shared_ptr<Connection<T>> client)
 			{
 				return false;
 			}
 
-			virtual void OnClientDisconnect(std::shared_ptr<connection<T>> client)
+			virtual void OnClientDisconnect(std::shared_ptr<Connection<T>> client)
 			{
 			}
 
-			virtual void OnMessage(std::shared_ptr<connection<T>> client, Message<T>& msg)
+			virtual void OnMessage(std::shared_ptr<Connection<T>> client, Message<T>& msg)
 			{
 			}
 
@@ -162,7 +160,7 @@ namespace NL
 			TSQueue<OwnedMessage < T>> m_qMessagesIn;
 
 			//Container of active validated connections
-			std::deque<std::shared_ptr<connection<T>>> m_deqConnections;
+			std::deque<std::shared_ptr<Connection<T>>> m_deqConnections;
 
 			//Order of declaration is important- it is also the order of initialisation
 			asio::io_context m_asioContext;
