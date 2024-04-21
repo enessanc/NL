@@ -48,7 +48,7 @@ namespace NL
 				catch (std::exception& e)
 				{
 					//TODO: Replace this line with appropriate logging module
-					std::cerr << "FClient Exception: " << e.what() << "\n";
+					std::cerr << "Client Exception: " << e.what() << "\n";
 					return false;
 				}
 

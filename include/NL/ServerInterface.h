@@ -139,6 +139,7 @@ namespace NL
 
 			virtual void OnClientValidated(std::shared_ptr<Connection<T>> client)
 			{
+
 			}
 
 		protected:
