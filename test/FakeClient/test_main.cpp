@@ -10,7 +10,7 @@ using namespace NL;
 TEST(NLClientTest, FakeClientTest)
 {
     ClientInterface<TestMsgType> ci;
-    ASSERT_EQ(ci.Connect("127.0.0.1", 45555), false) << "Connection test was not successful.";
+    EXPECT_EQ(ci.Connect("127.0.0.1", 45555), true) << "Connection test was not successful.";
 
     TestStructA sent_struct_a{};
     sent_struct_a.data1 = 1234567;
