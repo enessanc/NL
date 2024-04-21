@@ -14,6 +14,11 @@ namespace NL
 
 			}
 
+            bool IsRunning()
+            {
+                return is_server_running;
+            }
+
 			virtual ~ServerInterface()
 			{
 				Stop();
@@ -24,7 +29,6 @@ namespace NL
 				try
 				{
 					WaitForClientConnection();
-
 					m_threadContext = std::thread([this]() {m_asioContext.run(); });
 				}
 				catch (std::exception& e)
@@ -32,7 +36,9 @@ namespace NL
 					std::cerr << "[SERVER] Exception: " << e.what() << "\n";
 					return false;
 				}
+
 				std::cout << "[SERVER] Started!\n";
+                is_server_running = true;
 				return true;
 			}
 
@@ -45,7 +51,8 @@ namespace NL
 					m_threadContext.join();
 				}
 
-				std::cout << "[SERVER] Stooped!\n";
+				std::cout << "[SERVER] Stopped!\n";
+                is_server_running = false;
 			}
 
 			void WaitForClientConnection()
@@ -172,6 +179,9 @@ namespace NL
 
 			//Clients will be identified in the "wider system" via an ID
 			uint32_t nIDCounter = 10000;
+
+        private:
+            bool is_server_running = false;
 
         };
 }

@@ -7,12 +7,13 @@ set(TEST_STATUS ON)
 add_library(
         NL
         INTERFACE
-        include/NL/ClientInterface.h
-        include/NL/Common.h
-        include/NL/Connection.h
-        include/NL/Message.h
-        include/NL/ServerInterface.h
-        include/NL/TSQueue.h
+        include/NL/impl/ClientInterface.h
+        include/NL/impl/Common.h
+        include/NL/impl/Connection.h
+        include/NL/impl/Message.h
+        include/NL/impl/ServerInterface.h
+        include/NL/impl/TSQueue.h
+        include/NL/NL.h
 )
 
 target_include_directories(NL
@@ -21,7 +22,6 @@ target_include_directories(NL
 
 
 if(TEST_STATUS)
-    enable_testing()
     message("Build progress for tests for NL is starting.")
     add_subdirectory(test)
 endif()
