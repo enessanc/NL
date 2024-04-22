@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(NL)
 
 set(CMAKE_CXX_STANDARD 20)
-set(TEST_STATUS ON)
+set(TEST_STATUS OFF)
 
 add_library(
         NL
