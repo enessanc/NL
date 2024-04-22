@@ -183,11 +183,11 @@ int main(int argc, char** argv)
 {
     if(test_fake_client())
     {
-        std::cout << "Test passed." << std::endl;
+        std::cout << "FakeClientTest passed." << std::endl;
     }
     else
     {
-        std::cerr << "Test did not passed." << std::endl;
+        std::cerr << "FakeServerTest did not passed." << std::endl;
     }
 
     return EXIT_SUCCESS;
